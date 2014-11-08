@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 gem 'sequel'
-gem 'sinatra'
+gem 'sinatra', :require => "sinatra/synchrony"
 gem 'sinatra-synchrony'
 gem 'pg'
 gem 'rack'
