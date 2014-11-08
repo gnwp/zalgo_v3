@@ -34,6 +34,7 @@ class Zalgo < Sinatra::Base
 	end
 
 	get "/search" do
+		# ugly, hard-coded search. To be replaced by something more modular and nicer.
 		logger "/search/" + params.map{ |k,v| "#{k}='#{v}'" }.join( " " )
 		@form = {}
 		query = get_posts( )

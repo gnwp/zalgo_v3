@@ -1,8 +1,9 @@
+<div class="toolbox">
+	<%= erb :toolbox %>
+</div>
+
 <% @posts.each do |post| %>
 
-<div class="post">
-	<%= post[:sender_login] %>
 
-</div>
 
 <% end %>
