@@ -1,0 +1,8 @@
+<% @posts.each do |post| %>
+
+<div class="post">
+	<%= post[:sender_login] %>
+
+</div>
+
+<% end %>

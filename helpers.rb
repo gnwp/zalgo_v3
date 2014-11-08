@@ -1,4 +1,23 @@
+class Symbol
+	def not
+		return Sequel.~( self )
+	end
+	def as(x)
+		return Sequel.as(self, x)
+	end
+	def desc
+		return Sequel.desc(self)
+	end
+end
+class NilClass
+	def strftime(x)
+		return "error"
+	end
+end
+
+
 class Sinatra::Base
+
 
 	helpers do
 
