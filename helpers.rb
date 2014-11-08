@@ -2,11 +2,21 @@ class Symbol
 	def not
 		return Sequel.~( self )
 	end
+	
 	def as(x)
 		return Sequel.as(self, x)
 	end
+
 	def desc
 		return Sequel.desc(self)
+	end
+
+	def ilike(x)
+		return Sequel.ilike(self, x)
+	end
+
+	def like(x)
+		return Sequel.like(self, x)
 	end
 end
 class NilClass
