@@ -11,6 +11,9 @@ GEM
       em-socksify (>= 0.3)
       eventmachine (>= 1.0.3)
       http_parser.rb (>= 0.6.0)
+    em-pg-client (0.3.4)
+      eventmachine (~> 1.0.0)
+      pg (>= 0.17.0)
     em-resolv-replace (1.1.3)
     em-socksify (0.3.0)
       eventmachine (>= 1.0.0.beta.4)
@@ -57,9 +60,10 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  em-pg-client
   erubis
+  eventmachine
   htmlcompressor
-  pg
   rack
   rchardet19
   sanitize
