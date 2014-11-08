@@ -7,3 +7,5 @@ gem 'rchardet19'
 gem 'sanitize'
 gem 'htmlcompressor'
 gem 'thin'
+gem 'erubis'
+
