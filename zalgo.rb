@@ -25,7 +25,11 @@ class Zalgo < Sinatra::Base
 		logger "/"
 		@form = {}
 		@posts = get_posts( ).limit( 50 )
-		erb :node
+		if @posts.nil? or @posts.count == 0
+			@c.compress( erb :"404" )
+		else
+			@c.compress( erb :node )
+		end
 
 	end
 
@@ -116,7 +120,11 @@ class Zalgo < Sinatra::Base
 		end
 
 		@posts = query.all
-		erb :node
+		if @posts.nil? or @posts.count == 0
+			@c.compress( erb :"404" )
+		else
+			@c.compress( erb :node )
+		end
 
 	end
 
@@ -126,9 +134,9 @@ class Zalgo < Sinatra::Base
 		@posts = get_posts( :user__id => id.to_i )
 
 		if @posts.nil? or @posts.count == 0
-			erb :"404"
+			@c.compress( erb :"404" )
 		else
-			erb :node
+			@c.compress( erb :node )
 		end
 	end
 
@@ -138,9 +146,9 @@ class Zalgo < Sinatra::Base
 		@posts = get_posts( :nodes__id => id.to_i )
 
 		if @posts.nil? or @posts.count == 0
-			erb :"404"
+			@c.compress( erb :"404" )
 		else
-			erb :node
+			@c.compress( erb :node )
 		end
 
 	end
@@ -152,9 +160,9 @@ class Zalgo < Sinatra::Base
 		@posts = get_posts( :texts__id => id )
 
 		if @posts.nil? or @posts.count == 0
-			erb :"404"
+			@c.compress( erb :"404" )
 		else
-			erb :node
+			@c.compress( erb :node )
 		end
 	end
 
