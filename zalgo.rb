@@ -3,5 +3,11 @@
 
 require "rubygems"
 require "bundler"
+
 Bundler.require
 
+class Zalgo < Sinatra::Base
+	register Sinatra::Synchrony
+
+
+end

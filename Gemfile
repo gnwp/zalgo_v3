@@ -1,6 +1,7 @@
 source 'https://rubygems.org'
 gem 'sequel'
 gem 'sinatra'
+gem 'sinatra-synchrony'
 gem 'pg'
 gem 'rack'
 gem 'rchardet19'
