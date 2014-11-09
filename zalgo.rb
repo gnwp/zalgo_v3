@@ -21,6 +21,11 @@ class Zalgo < Sinatra::Base
 		@c = HtmlCompressor::Compressor.new
 	end
 
+
+	get %r{/zalgo/(.*)$} do
+		puts "/#{params[:captures].first}"
+		redirect "/#{params[:captures].first}"
+	end
 	get "/" do
 		logger "/"
 		@form = {}
