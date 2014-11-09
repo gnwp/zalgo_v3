@@ -5,7 +5,7 @@
 </div>
 
 <div class="row">
-	<form class="form" role="search" action="/search" method="get">
+	<form class="form" role="search" action="/zalgo/search" method="get">
 		<div class="col-md-6 col-md-offset-3 centered">
 		
 			<div class="form-group">
@@ -30,7 +30,7 @@
 					<select name="s" class="form-control">
 						<option value="">Dowolne źródło</option>
 						<% get_sources().each do |src| %>
-							<option value="<%== src[:title] %>"><%== src[:title] %></option>
+							<option value="<%== src[:title] %>" <%= "selected" if src[:title] == @form[:s] %>><%== src[:title] %></option>
 						<% end %>
 					</select>
 					
