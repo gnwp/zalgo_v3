@@ -2,7 +2,7 @@
 
 
 DB["SET default_text_search_config = 'public.polish';"]
-
+Sequel.extension :core_extensions
 
 # all users/origins of given data
 class User < Sequel::Model( :users )
