@@ -1,3 +1,5 @@
+<%= erb :home %>
+
 <% @posts.each do |post| %>
 	<div class="post-entry" id="post<%= post[:text_id] %>">
 		<ul class="breadcrumb">
@@ -7,7 +9,7 @@
 				<a href="/zalgo/node/<%= post[:node_id] %>#post<%= post[:text_id] %>" class="glyphicon glyphicon-asterisk" title="Odnośnik do tego posta w całym temacie"></a>
 			</li>
 			<li><%= post[:source_title] %></li>
-			<li><a href="/zalgo/node/<%= post[:node_id] %>"><%= post[:node_title] %></a></li>
+			<li><a href="/zalgo/node/<%= post[:node_id] %>#post<%= post[:text_id] %>"><%= post[:node_title] %></a></li>
 			<% if post[:text_title].strip.length > 0 %>
 				<li><a href="/zalgo/post/<%= post[:text_id] %>"><%= post[:text_title] %></a></li>
 			<% end %>
