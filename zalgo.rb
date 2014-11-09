@@ -28,8 +28,9 @@ class Zalgo < Sinatra::Base
 	get "/" do
 		logger "/"
 		@form = {}
-		@c.compress( erb :home )
 		@title = "Szukaj"
+		@c.compress( erb :home )
+		
 
 	end
 
