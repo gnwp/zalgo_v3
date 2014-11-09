@@ -29,6 +29,7 @@ class Zalgo < Sinatra::Base
 		logger "/"
 		@form = {}
 		@c.compress( erb :home )
+		@title = "Szukaj"
 
 	end
 
@@ -38,10 +39,12 @@ class Zalgo < Sinatra::Base
 		@form = {}
 		if params[:q].nil? or params[:q] == ""
 			query = get_posts( )
+			@title = "Szukaj"
 		else
 			query = get_posts( )
 			query.full_text_search!( params[:q] )
 			@form[:q] = params[:q]
+			@title = params[:q]
 		end
 
 		unless( params[:ds].nil? or params[:ds] == "" )
@@ -123,6 +126,7 @@ class Zalgo < Sinatra::Base
 
 		@posts = query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) ) ).all
 		@num_posts = @posts.count + 1
+
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
@@ -134,9 +138,9 @@ class Zalgo < Sinatra::Base
 	get "/user/:id" do |id|
 		logger "/user/#{id}"
 		@form = {}
-		@posts = get_posts( { :texts__sender => id, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
+		@posts = get_posts( { :texts__sender => id.to_i, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
 		@num_posts = @posts.count + 1
-
+		@title = User[:id =>id.to_i][:login]
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
@@ -149,6 +153,7 @@ class Zalgo < Sinatra::Base
 		@form = {}
 		@posts = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc ).all
 		@num_posts = @posts.count + 1
+		@title = @posts.first[:node_title]
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
@@ -163,7 +168,7 @@ class Zalgo < Sinatra::Base
 		@num_posts = 2;
 		@form = {}
 		@posts = get_posts( :texts__id => id ).all
-
+		@title = [@posts.first[:node_title], @posts.first[:text_title]].reject{|i| i.nil? || i.to_s.strip == ""}.join(" - ")
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
