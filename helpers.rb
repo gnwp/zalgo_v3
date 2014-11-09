@@ -102,9 +102,10 @@ class Sinatra::Base
 		def bbcode( content ) 
 			c = html_strip( content )
 			c = c.gsub( /\[b.*?\]/imx, "<b>" ).gsub( /\[\/b.*?\]/imx, "</b>" )
-			c = c.gsub( /\[quote.*?"(.*?)".*?\]/imx, "<blockquote cite=\\1><b>\\1</b><br />" )
+
+			c = c.gsub( /\[quote.*?"(.*?)".*?\]/imx, "<blockquote>::\\1::" )
 			c = c.gsub( /\[quote.*?\]/imx, "<blockquote>" ).gsub( /\[\/quote.*?\]/imx, "</blockquote>" )
-			
+			c = c.gsub( /\<blockquote\>::(.*?)::(.*?)\<\/blockquote\>/imx, "<blockquote>\\2<footer><cite>\\1</cite></footer></blockquote>")
 			return bbcode_strip( c )
 		end
 
