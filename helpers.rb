@@ -19,6 +19,12 @@ class Symbol
 		return Sequel.like(self, x)
 	end
 end
+
+class Hash
+	def sql_or
+		return Sequel.or(self)
+	end
+end
 class NilClass
 	def strftime(x)
 		return "error"
