@@ -23,7 +23,6 @@ class Zalgo < Sinatra::Base
 
 
 	get %r{/zalgo/(.*)$} do
-		puts "/#{params[:captures].first}"
 		redirect "/#{params[:captures].first}"
 	end
 	get "/" do
@@ -125,7 +124,7 @@ class Zalgo < Sinatra::Base
 			@form[:l] = 50
 		end
 
-		@posts = query.all
+		@posts = query.order(:texts__id.desc).all
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
@@ -137,7 +136,8 @@ class Zalgo < Sinatra::Base
 	get "/user/:id" do |id|
 		logger "/user/#{id}"
 		@form = {}
-		@posts = get_posts( :user__id => id.to_i )
+		@posts = get_posts( { :texts__sender => id, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 )
+		
 
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
@@ -149,7 +149,7 @@ class Zalgo < Sinatra::Base
 	get "/node/:id" do |id|
 		logger "/node/#{id}"
 		@form = {}
-		@posts = get_posts( :nodes__id => id.to_i )
+		@posts = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc )
 
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
