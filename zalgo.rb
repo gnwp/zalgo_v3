@@ -42,8 +42,10 @@ class Zalgo < Sinatra::Base
 		# ugly, hard-coded search. To be replaced by something more modular and nicer.
 		logger "/search/" + params.map{ |k,v| "#{k}='#{v}'" }.join( " " )
 		@form = {}
-		query = get_posts( )
-		unless params[:q].nil? or params[:q] == ""
+		if params[:q].nil? or params[:q] == ""
+			query = get_posts( )
+		else
+			query = get_posts_hl( params[:q] )
 			query.full_text_search!( params[:q] )
 			@form[:q] = params[:q]
 		end
@@ -124,8 +126,8 @@ class Zalgo < Sinatra::Base
 			query.limit!( 50 )
 			@form[:l] = 50
 		end
-
-		@posts = query.order(:texts__id.desc).all
+		puts query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) )).sql
+		@posts = query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) )).all
 		@num_posts = @posts.count + 1
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
