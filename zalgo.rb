@@ -28,7 +28,8 @@ class Zalgo < Sinatra::Base
 	get "/" do
 		logger "/"
 		@form = {}
-		@posts = get_posts( ).limit( 50 )
+		@posts = get_posts( ).limit( 50 ).all
+		@num_posts = @posts.count + 1
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
@@ -125,6 +126,7 @@ class Zalgo < Sinatra::Base
 		end
 
 		@posts = query.order(:texts__id.desc).all
+		@num_posts = @posts.count + 1
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
@@ -136,8 +138,8 @@ class Zalgo < Sinatra::Base
 	get "/user/:id" do |id|
 		logger "/user/#{id}"
 		@form = {}
-		@posts = get_posts( { :texts__sender => id, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 )
-		
+		@posts = get_posts( { :texts__sender => id, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
+		@num_posts = @posts.count + 1
 
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
@@ -149,8 +151,8 @@ class Zalgo < Sinatra::Base
 	get "/node/:id" do |id|
 		logger "/node/#{id}"
 		@form = {}
-		@posts = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc )
-
+		@posts = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc ).all
+		@num_posts = @posts.count + 1
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
 		else
@@ -162,8 +164,9 @@ class Zalgo < Sinatra::Base
 	get "/post/:id" do |id|
 		logger "/post/#{id}"
 		id = id.split("+").map{|i| i.to_i}.uniq
+		@num_posts = 2;
 		@form = {}
-		@posts = get_posts( :texts__id => id )
+		@posts = get_posts( :texts__id => id ).all
 
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
