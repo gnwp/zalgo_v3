@@ -28,13 +28,7 @@ class Zalgo < Sinatra::Base
 	get "/" do
 		logger "/"
 		@form = {}
-		@posts = get_posts( ).limit( 50 ).all
-		@num_posts = @posts.count + 1
-		if @posts.nil? or @posts.count == 0
-			@c.compress( erb :"404" )
-		else
-			@c.compress( erb :node )
-		end
+		@c.compress( erb :home )
 
 	end
 
@@ -45,7 +39,7 @@ class Zalgo < Sinatra::Base
 		if params[:q].nil? or params[:q] == ""
 			query = get_posts( )
 		else
-			query = get_posts_hl( params[:q] )
+			query = get_posts( )
 			query.full_text_search!( params[:q] )
 			@form[:q] = params[:q]
 		end
@@ -126,8 +120,8 @@ class Zalgo < Sinatra::Base
 			query.limit!( 50 )
 			@form[:l] = 50
 		end
-		puts query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) )).sql
-		@posts = query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) )).all
+
+		@posts = query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) ) ).all
 		@num_posts = @posts.count + 1
 		if @posts.nil? or @posts.count == 0
 			@c.compress( erb :"404" )
