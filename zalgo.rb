@@ -125,7 +125,17 @@ class Zalgo < Sinatra::Base
 			@form[:l] = 50
 		end
 
-		@posts = query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) ) ).all
+		posts_all = query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) ) ).all
+		@posts = []
+		posts_map = []
+		posts_all.map do |post| #filter doubled posts - phpbb fault.
+			id = Digest::MD5.hexdigest( "#{post[:text_content]} #{post[:text_title]} #{post[:text_date]} #{post[:sender_id]}" )
+			unless posts_map.include?( id )
+				posts_map << id
+				@posts << post
+			end
+		end
+
 		@num_posts = @posts.count + 1
 
 		if @posts.nil? or @posts.count == 0
@@ -139,7 +149,17 @@ class Zalgo < Sinatra::Base
 	get "/user/:id" do |id|
 		logger "/user/#{id}"
 		@form = {}
-		@posts = get_posts( { :texts__sender => id.to_i, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
+		posts_all = get_posts( { :texts__sender => id.to_i, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
+		@posts = []
+		posts_map = []
+		posts_all.map do |post| #filter doubled posts - phpbb fault.
+			id = Digest::MD5.hexdigest( "#{post[:text_content]} #{post[:text_title]} #{post[:text_date]} #{post[:sender_id]}" )
+			unless posts_map.include?( id )
+				posts_map << id
+				@posts << post
+			end
+		end
+
 		@num_posts = @posts.count + 1
 		@title = User[:id =>id.to_i][:login]
 		if @posts.nil? or @posts.count == 0
@@ -152,7 +172,16 @@ class Zalgo < Sinatra::Base
 	get "/node/:id" do |id|
 		logger "/node/#{id}"
 		@form = {}
-		@posts = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc ).all
+		posts_all = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc ).all
+		@posts = []
+		posts_map = []
+		posts_all.map do |post| #filter doubled posts - phpbb fault.
+			id = Digest::MD5.hexdigest( "#{post[:text_content]} #{post[:text_title]} #{post[:text_date]} #{post[:sender_id]}" )
+			unless posts_map.include?( id )
+				posts_map << id
+				@posts << post
+			end
+		end
 		@num_posts = @posts.count + 1
 		@title = @posts.first[:node_title]
 		if @posts.nil? or @posts.count == 0
