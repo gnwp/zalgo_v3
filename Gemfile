@@ -12,6 +12,5 @@ gem 'erubis'
 gem 'eventmachine'
 gem 'em-pg-client'
 gem 'nokogiri'
-gem 'ruby-bbcode', :git => 'git://github.com/gnwp/ruby-bbcode.git'
 gem 'pry'
-
+gem 'bb-ruby'
