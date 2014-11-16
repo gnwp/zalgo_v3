@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/gnwp/ruby-bbcode.git
-  revision: 43d8bf58469698af9cb253247f1332318d8aeafd
+  revision: dd2f706373a975ce3e4a3299738c8b3aa4328be1
   specs:
     ruby-bbcode (1.0.0)
       activesupport (~> 3.2.3)
@@ -12,6 +12,7 @@ GEM
       i18n (~> 0.6, >= 0.6.4)
       multi_json (~> 1.0)
     addressable (2.3.6)
+    coderay (1.1.0)
     cookiejar (0.3.2)
     crass (0.2.1)
     daemons (1.1.9)
@@ -34,6 +35,7 @@ GEM
     htmlcompressor (0.1.2)
     http_parser.rb (0.6.0)
     i18n (0.6.11)
+    method_source (0.8.2)
     mini_portile (0.6.1)
     multi_json (1.10.1)
     nokogiri (1.6.4.1)
@@ -41,6 +43,10 @@ GEM
     nokogumbo (1.1.12)
       nokogiri
     pg (0.17.1)
+    pry (0.10.1)
+      coderay (~> 1.1.0)
+      method_source (~> 0.8.1)
+      slop (~> 3.4)
     rack (1.5.2)
     rack-fiber_pool (0.9.3)
     rack-protection (1.5.3)
@@ -62,6 +68,7 @@ GEM
       eventmachine (~> 1.0.0)
       rack-fiber_pool (~> 0.9)
       sinatra (~> 1.0)
+    slop (3.6.0)
     thin (1.6.3)
       daemons (~> 1.0, >= 1.0.9)
       eventmachine (~> 1.0)
@@ -77,6 +84,7 @@ DEPENDENCIES
   eventmachine
   htmlcompressor
   nokogiri
+  pry
   rack
   rchardet19
   ruby-bbcode!
