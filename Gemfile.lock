@@ -64,6 +64,7 @@ DEPENDENCIES
   erubis
   eventmachine
   htmlcompressor
+  nokogiri
   rack
   rchardet19
   sanitize

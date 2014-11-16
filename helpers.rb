@@ -2,7 +2,7 @@ class Symbol
 	def not
 		return Sequel.~( self )
 	end
-	
+
 
 end
 
@@ -30,7 +30,7 @@ class Sinatra::Base
 		def get_sources( )
 			return Source.all
 		end
-		
+
 		def get_posts_hl( opts = {}, query )
 			post = Text.filter( opts ).
 				left_outer_join( :nodes, :nodes__id => :texts__node ).
@@ -52,7 +52,7 @@ class Sinatra::Base
 					:sender__login.as( :sender_login ),
 					:receiver__login.as( :receiver_login ),
 					:texts__rating.as( :text_rating )
-					
+
 				]}.order( :texts__date.desc )
 			return post
 
@@ -79,7 +79,7 @@ class Sinatra::Base
 					:sender__login.as( :sender_login ),
 					:receiver__login.as( :receiver_login ),
 					:texts__rating.as( :text_rating )
-					
+
 				]}.order( :texts__date.desc )
 			return post
 		end
@@ -87,8 +87,8 @@ class Sinatra::Base
 		def get_users( opts = {} )
 			user = User.filter( opts ).
 				left_outer_join( :sources, :sources__id => :users__source ).
-				select{ [ 
-					:users__id.as( :user_id ), 
+				select{ [
+					:users__id.as( :user_id ),
 					:users__login.as( :user_login ),
 					:users__email.as( :user_email ),
 					:users__hash.as( :user_hash ),
@@ -97,12 +97,12 @@ class Sinatra::Base
 					:sources__title.as( :source_title ),
 					:sources__url.as( :source_url ),
 					:sources__notes.as( :source_notes )
-				
+
 				] }
 			return user
 		end
 
-		def get_topics( opts = {} ) 
+		def get_topics( opts = {} )
 			Node.filter( opts )
 		end
 
@@ -114,18 +114,18 @@ class Sinatra::Base
 			return content.gsub("<b>", "[b]").gsub("</b>", "[/b]").gsub( /\<img.*?\/\>/imx, "" ).gsub( /\<\!\-\-.*?\-\-\>/imx, "" ).gsub( /\</imx, "&lt;" ).gsub( /\>/imx, "&gt;" )
 		end
 
-		def bbcode_strip( content ) 
+		def bbcode_strip( content )
 			return content.gsub( /\[\/?(?:b|i|u|url|quote|code|img|color|size)*?.*?\]/imx, "" ).gsub( /(.)\"\](.)/imx, "$1 $2" )
 		end
 
-		def bbcode( content ) 
+		def bbcode( content )
 			c = html_strip( content )
 			c = c.gsub( /\[b.*?\]/imx, "<b>" ).gsub( /\[\/b.*?\]/imx, "</b>" )
 
 			c = c.gsub( /\[quote.*?"(.*?)".*?\]/imx, "<blockquote>::\\1::" )
 			c = c.gsub( /\[quote.*?\]/imx, "<blockquote>" ).gsub( /\[\/quote.*?\]/imx, "</blockquote>" )
 			c = c.gsub( /\<blockquote\>::(.*?)::(.*?)\<\/blockquote\>/imx, "<blockquote>\\2<footer><cite>\\1</cite></footer></blockquote>")
-			return bbcode_strip( c )
+			return ::Nokogiri::HTML::DocumentFragment.parse( bbcode_strip( c ) ).to_html
 		end
 
 	end
