@@ -1,6 +1,16 @@
+GIT
+  remote: git://github.com/gnwp/ruby-bbcode.git
+  revision: 43d8bf58469698af9cb253247f1332318d8aeafd
+  specs:
+    ruby-bbcode (1.0.0)
+      activesupport (~> 3.2.3)
+
 GEM
   remote: https://rubygems.org/
   specs:
+    activesupport (3.2.20)
+      i18n (~> 0.6, >= 0.6.4)
+      multi_json (~> 1.0)
     addressable (2.3.6)
     cookiejar (0.3.2)
     crass (0.2.1)
@@ -23,7 +33,9 @@ GEM
     eventmachine (1.0.3)
     htmlcompressor (0.1.2)
     http_parser.rb (0.6.0)
+    i18n (0.6.11)
     mini_portile (0.6.1)
+    multi_json (1.10.1)
     nokogiri (1.6.4.1)
       mini_portile (~> 0.6.0)
     nokogumbo (1.1.12)
@@ -67,6 +79,7 @@ DEPENDENCIES
   nokogiri
   rack
   rchardet19
+  ruby-bbcode!
   sanitize
   sequel
   sinatra
