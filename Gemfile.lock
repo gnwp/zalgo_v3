@@ -1,6 +1,6 @@
 GIT
   remote: git://github.com/gnwp/ruby-bbcode.git
-  revision: dd2f706373a975ce3e4a3299738c8b3aa4328be1
+  revision: 3ab284f6a495d497c52032de0724c1769c6ee782
   specs:
     ruby-bbcode (1.0.0)
       activesupport (~> 3.2.3)
