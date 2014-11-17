@@ -101,7 +101,7 @@
 				<div id="disqus_thread"></div>
 				<script type="text/javascript">
 				var disqus_shortname = 'gnwp';
-				var disqus_url = 'https://gnwp.eu/zalgo/<%== @zalgo_url %>';
+				var disqus_url = 'https://gnwp.eu/zalgo<%== @zalgo_url %>';
 				/* * * DON'T EDIT BELOW THIS LINE * * */
 				(function() {
 					var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
