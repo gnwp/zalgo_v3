@@ -32,13 +32,14 @@ class Zalgo < Sinatra::Base
 		@form = {}
 		@title = "Szukaj"
 		@c.compress( erb :home )
-
+		@zalgo_url = ""
 
 	end
 
 	get "/search" do
 		# ugly, hard-coded search. To be replaced by something more modular and nicer.
 		logger "/search/" + params.map{ |k,v| "#{k}='#{v}'" }.join( " " )
+		@zalgo_url = "/search"
 		@form = {}
 		if params[:q].nil? or params[:q] == ""
 			query = get_posts( )
@@ -140,6 +141,7 @@ class Zalgo < Sinatra::Base
 
 	get "/user/:id" do |id|
 		logger "/user/#{id}"
+		@zalgo_url = "/user/#{id}"
 		@form = {}
 		@posts = get_posts( { :texts__sender => id.to_i, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
 		@num_posts = @posts.count + 1
@@ -153,6 +155,7 @@ class Zalgo < Sinatra::Base
 
 	get "/node/:id" do |id|
 		logger "/node/#{id}"
+		@zalgo_url = "/node/#{id}"
 		@form = {}
 		@posts = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc ).all
 		@num_posts = @posts.count + 1
@@ -167,6 +170,7 @@ class Zalgo < Sinatra::Base
 
 	get "/post/:id" do |id|
 		logger "/post/#{id}"
+		@zalgo_url = "/post/#{id}"
 		id = id.split("+").map{|i| i.to_i}.uniq
 		@num_posts = 2;
 		@form = {}
