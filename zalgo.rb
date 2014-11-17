@@ -145,7 +145,7 @@ class Zalgo < Sinatra::Base
 		logger "/user/#{id}"
 		@zalgo_url = "/user/#{id}"
 		@form = {}
-		@posts = get_posts( { :texts__sender => id.to_i, :texts__receiver => id }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
+		@posts = get_posts( { :texts__sender => id.to_i, :texts__receiver => id.to_i }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
 		@num_posts = @posts.count + 1
 		@title = User[:id =>id.to_i][:login]
 		if @posts.nil? or @posts.count == 0
