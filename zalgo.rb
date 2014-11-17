@@ -12,7 +12,7 @@ DB = Sequel.connect("postgres://antifa:antifa@localhost/antifa")
 load "helpers.rb"
 load "database.rb"
 
-CACHE_CLIENT = Dalli::Client.new( '127.0.0.1:11211' )
+CACHE_CLIENT = Dalli::Client.new( '127.0.0.1:11211', :value_max_bytes => 5242880 )
 Sequel::Model.plugin :query_cache, CACHE_CLIENT, :ttl => 3600, :cache_by_default => { :always => true }
 
 class Zalgo < Sinatra::Base
