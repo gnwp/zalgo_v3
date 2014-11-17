@@ -12,6 +12,8 @@ DB = Sequel.connect("postgres://antifa:antifa@localhost/antifa")
 load "helpers.rb"
 load "database.rb"
 
+CACHE_CLIENT = Dalli::Client.new( '127.0.0.1:11211' )
+Sequel::Model.plugin :query_cache, CACHE_CLIENT, :ttl => 3600, :cache_by_default => { :always => true }
 
 class Zalgo < Sinatra::Base
 	register Sinatra::Synchrony
@@ -30,7 +32,7 @@ class Zalgo < Sinatra::Base
 		@form = {}
 		@title = "Szukaj"
 		@c.compress( erb :home )
-		
+
 
 	end
 
@@ -67,7 +69,7 @@ class Zalgo < Sinatra::Base
 					de = nil
 				end
 			end
-			
+
 			if( ds.nil? || de.nil? )
 				@form[:ds] = ""
 				@form[:de] = ""
