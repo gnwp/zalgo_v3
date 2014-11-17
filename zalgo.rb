@@ -22,6 +22,7 @@ class Zalgo < Sinatra::Base
 		super
 		@c = HtmlCompressor::Compressor.new
 	end
+
 	error 400..510 do
 		'oh shit'
 	end
@@ -35,14 +36,22 @@ class Zalgo < Sinatra::Base
 		@form = {}
 		@title = "Szukaj"
 		@zalgo_url = "/"
-		@c.compress( erb :home )
 
+		cached = CACHE_CLIENT.get("/routes/home")
+		return cached unless cached.nil?
+		cached = @c.compress( erb :home )
+		CACHE_CLIENT.set("/routes/home", cached)
+		return cached
 
 	end
 
 	get "/search" do
 		# ugly, hard-coded search. To be replaced by something more modular and nicer.
 		logger "/search/" + params.map{ |k,v| "#{k}='#{v}'" }.join( " " )
+		cache_key = OpenSSL::Digest::MD5.hexdigest(params.to_a.join)
+		cached = CACHE_CLIENT.get("/routes/search/#{cache_key}")
+		return cached unless cached.nil?
+
 		@zalgo_url = "/search"
 		@form = {}
 		if params[:q].nil? or params[:q] == ""
@@ -136,56 +145,85 @@ class Zalgo < Sinatra::Base
 		@posts = query.order(:ts_rank.sql_function( 'public.polish', :plainto_tsquery.sql_function( params[:q] ) ) ).all
 		@num_posts = @posts.count + 1
 
-		if @posts.nil? or @posts.count == 0
-			@c.compress( erb :"404" )
-		else
-			@c.compress( erb :node )
-		end
 
+		if @posts.nil? or @posts.count == 0
+			cached = @c.compress( erb :"404" )
+		else
+			cached = @c.compress( erb :node )
+		end
+		CACHE_CLIENT.set("/routes/search/#{cache_key}", cached)
+		return cached
 	end
 
 	get "/user/:id" do |id|
 		logger "/user/#{id}"
+		cache_key = id.to_i
+		cached = CACHE_CLIENT.get("/routes/user/#{cache_key}")
+		return cached unless cached.nil?
+
 		@zalgo_url = "/user/#{id}"
 		@form = {}
 		@posts = get_posts( { :texts__sender => id.to_i, :texts__receiver => id.to_i }.sql_or ).order( :texts__id.desc ).limit( 50 ).all
 		@num_posts = @posts.count + 1
-		@title = User[:id =>id.to_i][:login]
+
+
 		if @posts.nil? or @posts.count == 0
-			@c.compress( erb :"404" )
+			cached = @c.compress( erb :"404" )
 		else
-			@c.compress( erb :node )
+			@title = get_user( id.to_i )[:login]
+			cached = @c.compress( erb :node )
 		end
+		CACHE_CLIENT.set("/routes/user/#{cache_key}", cached)
+		return cached
+
 	end
 
 	get "/node/:id" do |id|
 		logger "/node/#{id}"
+		cache_key = id.to_i
+		cached = CACHE_CLIENT.get("/routes/node/#{cache_key}")
+		return cached unless cached.nil?
+
 		@zalgo_url = "/node/#{id}"
 		@form = {}
 		@posts = get_posts( :nodes__id => id.to_i ).order( :texts__id.desc ).all
-		@num_posts = @posts.count + 1
-		@title = @posts.first[:node_title]
-		if @posts.nil? or @posts.count == 0
-			@c.compress( erb :"404" )
-		else
-			@c.compress( erb :node )
+		if @posts and @posts.count > 0
+			@num_posts = @posts.count + 1
+			@title = @posts.first[:node_title]
 		end
+		if @posts.nil? or @posts.count == 0
+			cached = @c.compress( erb :"404" )
+		else
+			cached = @c.compress( erb :node )
+		end
+
+		CACHE_CLIENT.set("/routes/node/#{cache_key}", cached)
+		return cached
 
 	end
 
 	get "/post/:id" do |id|
 		logger "/post/#{id}"
-		@zalgo_url = "/post/#{id}"
 		id = id.split("+").map{|i| i.to_i}.uniq
-		@num_posts = 2;
+		cache_key = OpenSSL::Digest::MD5.hexdigest( id.join(".") )
+		cached = CACHE_CLIENT.get("/routes/post/#{cache_key}")
+		return cached unless cached.nil?
+
+		@zalgo_url = "/post/#{id}"
+		@num_posts = id.length + 1;
 		@form = {}
 		@posts = get_posts( :texts__id => id ).all
-		@title = [@posts.first[:node_title], @posts.first[:text_title]].reject{|i| i.nil? || i.to_s.strip == ""}.join(" - ")
+
+
 		if @posts.nil? or @posts.count == 0
-			@c.compress( erb :"404" )
+			cached = @c.compress( erb :"404" )
 		else
-			@c.compress( erb :node )
+			@title = [@posts.first[:node_title], @posts.first[:text_title]].reject{|i| i.nil? || i.to_s.strip == ""}.join(" - ")
+			cached = @c.compress( erb :node )
 		end
+
+		CACHE_CLIENT.set("/routes/post/#{cache_key}", cached)
+		return cached
 	end
 
 

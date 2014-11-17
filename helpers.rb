@@ -25,10 +25,17 @@ class Sinatra::Base
 
 		def logger( text )
 			puts Time.now.strftime("%H:%M:%S") + "	" + text
+			return nil
 		end
 
 		def get_sources( )
-			return Source.all
+			sources = CACHE_CLIENT.get( "/get_sources" )
+			if sources.nil?
+				sources = Source.all
+				CACHE_CLIENT.set( "/get_sources", sources )
+			end
+
+			return sources
 		end
 
 		def get_posts_hl( opts = {}, query )
@@ -59,6 +66,7 @@ class Sinatra::Base
 		end
 
 		def get_posts( opts = {} )
+
 			post = Text.filter( opts ).
 				left_outer_join( :nodes, :nodes__id => :texts__node ).
 				left_outer_join( :sources, :sources__id => :nodes__source ).
@@ -81,6 +89,7 @@ class Sinatra::Base
 					:texts__rating.as( :text_rating )
 
 				]}.order( :texts__date.desc )
+
 			return post
 		end
 
@@ -100,6 +109,17 @@ class Sinatra::Base
 
 				] }
 			return user
+		end
+
+
+		def get_user( id )
+			cache_key = OpenSSL::Digest::MD5.hexdigest(id.to_s)
+			cached = CACHE_CLIENT.get("/get_user/#{cache_key}")
+			return cached unless cached.nil?
+
+			cached = User.filter( :id => id.to_i ).first
+			CACHE_CLIENT.set("/get_user/#{cache_key}", cached)
+			return cached
 		end
 
 		def get_topics( opts = {} )
