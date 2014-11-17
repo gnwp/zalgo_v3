@@ -57,6 +57,9 @@
 			#advancedrow input, #advancedrow select {
 				margin-top: 3px;
 			}
+			#disqus_thread {
+				margin-top: 25px;
+			}
 		</style>
 		<script src="/bootstrap/js/jquery.min.js"></script>
 		<script type="text/javascript">
@@ -83,17 +86,30 @@
 						<li class="active"><a href="https://gnwp.eu/zalgo/">ZALGO</a></li>
 						<li><a href="https://up.gnwp.eu/">Upload</a></li>
 					</ul>
-					
+
 
 				</div><!--/.nav-collapse -->
 
-				
+
 			</div>
 		</nav>
 		<%= erb :toolbox %>
 
 			<div class="container">
 				<%= yield %>
+
+				<div id="disqus_thread"></div>
+				<script type="text/javascript">
+				var disqus_shortname = 'gnwp';
+
+				/* * * DON'T EDIT BELOW THIS LINE * * */
+				(function() {
+					var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+					dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+					(document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+				})();
+				</script>
+
 			</div>
 
 		<script src="/bootstrap/js/bootstrap.min.js"></script>
