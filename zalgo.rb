@@ -31,8 +31,9 @@ class Zalgo < Sinatra::Base
 		logger "/"
 		@form = {}
 		@title = "Szukaj"
-		@c.compress( erb :home )
 		@zalgo_url = ""
+		@c.compress( erb :home )
+
 
 	end
 
