@@ -22,6 +22,9 @@ class Zalgo < Sinatra::Base
 		super
 		@c = HtmlCompressor::Compressor.new
 	end
+	error 400..510 do
+		'oh shit'
+	end
 
 
 	get %r{/zalgo/(.*)$} do
