@@ -31,7 +31,7 @@ class Zalgo < Sinatra::Base
 		logger "/"
 		@form = {}
 		@title = "Szukaj"
-		@zalgo_url = ""
+		@zalgo_url = "/"
 		@c.compress( erb :home )
 
 
@@ -50,6 +50,7 @@ class Zalgo < Sinatra::Base
 			query.full_text_search!( params[:q] )
 			@form[:q] = params[:q]
 			@title = params[:q]
+			@zalgo_url = "/search?q=#{params[:q]}"
 		end
 
 		unless( params[:ds].nil? or params[:ds] == "" )
