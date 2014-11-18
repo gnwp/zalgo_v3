@@ -4,7 +4,7 @@
 		<meta charset="utf-8">
 		<meta http-equiv="X-UA-Compatible" content="IE=edge">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>GNWP ZALGO v3 - <%== @title %> </title>
+		<title>GNWP ZALGO - <%== @title %> </title>
 		<link href="/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
 		<!--[if lt IE 9]>
@@ -85,6 +85,9 @@
 					<ul class="nav navbar-nav">
 						<li class="active"><a href="https://gnwp.eu/zalgo/">ZALGO</a></li>
 						<li><a href="https://up.gnwp.eu/">Upload</a></li>
+						<li><a href="https://www.github.com/gnwp/">GitHub</a></li>
+						<li><a href="https://www.reddit.com/r/gnwp">Reddit</a></li>
+
 					</ul>
 
 
