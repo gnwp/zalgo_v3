@@ -5,48 +5,32 @@
 </div>
 
 <div class="row">
-	<form class="form" role="search" action="/zalgo/search" method="get">
+	<form class="form" role="search" action="/query" method="get">
 		<div class="col-md-6 col-md-offset-3 centered">
-		
-			<div class="form-group">
-				<div class="input-group">
-					
-					<input class="searchbox form-control input-lg" type="text" name="q" placeholder="Słowa kluczowe" value="<%== @form[:q] %>">
-					<span class="input-group-btn">
-						<button class="btn btn-default btn-lg" title="Wyszukaj"><span class="glyphicon glyphicon-search"></span></button>
-					</span>
 
-				</div>
+            <div class="form-group">
+                <div class="input-group">
 
-			</div>
-			
+                    <span class="input-group-btn">
+                    </span>
+                    <input class="searchbox form-control input-lg" type="text" name="q" placeholder="Słowa kluczowe" value="<%== @form[:q] %>">
+
+                    <span class="input-group-btn">
+                        <select name="s[]" class="selectpicker form-control input-lg" data-width="60px" data-style='glyphicon-cog form-control input-lg input-group-addon dropdown-input' multiple>
+                            <% get_sources().each do |src| %>
+                                <option value="<%== src[:title] %>" title="" <%= "selected" unless @form[:s].index(src[:title]).nil? %>><%== src[:title] %></option>
+                            <% end %>
+                        </select>
+                        <button class="btn btn-default btn-lg" title="Wyszukaj"><span class="glyphicon glyphicon-search"></span></button>
+                    </span>
+
+                </div>
+
+            </div>
+
 			<br class="clearfix" />
 
-			<a href="#" id="advancedbtn">Zaawansowane</a>
 
-			<div class="toolbox hidden" id="advancedrow">
-
-				<div class="form-group">
-					<select name="s" class="form-control">
-						<option value="">Dowolne źródło</option>
-						<% get_sources().each do |src| %>
-							<option value="<%== src[:title] %>" <%= "selected" if src[:title] == @form[:s] %>><%== src[:title] %></option>
-						<% end %>
-					</select>
-					
-					<input type="text" class="form-control" name="n" id="n" placeholder="Tytuł tematu" value="<%== @form[:n] %>">
-					<input type="text" class="form-control" name="t" id="q" placeholder="Tytuł postu" value="<%== @form[:t] %>">
-					<input type="text" class="form-control" name="r" id="r" placeholder="Odbiorca" value="<%== @form[:u] %>">
-					<input type="text" class="form-control" name="u" id="u" placeholder="Nadawca" value="<%== @form[:r] %>">
-					<input type="date" class="form-control" name="ds" id="ds" placeholder="Data OD np. 2012-08-09" value="<%== @form[:ds] %>">
-					<input type="date" class="form-control" name="de" id="de" placeholder="Data DO np. 2012-12-24" value="<%== @form[:de] %>">
-				</div>
-
-
-
-			</div>
-
-		
 		</div>
     </form>
 </div>

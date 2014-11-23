@@ -28,6 +28,15 @@ class Sinatra::Base
 			return nil
 		end
 
+		def escape_sphinx(input)
+			return input
+		end
+
+		def clean_sphinx(input)
+			return input.gsub(/\W+/, " ")
+		end
+
+
 		def get_sources( )
 			sources = CACHE_CLIENT.get( "/get_sources" )
 			if sources.nil?

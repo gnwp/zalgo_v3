@@ -15,13 +15,10 @@
 					</span>
                     <input class="searchbox form-control input-lg" type="text" name="q" placeholder="Słowa kluczowe" value="<%== @form[:q] %>">
 
-
-
-
 					<span class="input-group-btn">
 						<select name="s[]" class="selectpicker form-control input-lg" data-width="60px" data-style='glyphicon-cog form-control input-lg input-group-addon dropdown-input' multiple>
 							<% get_sources().each do |src| %>
-								<option value="<%== src[:title] %>" title="" <%= "selected" if src[:title] == @form[:s] %>><%== src[:title] %></option>
+								<option value="<%== src[:title] %>" title="" <%= "selected" unless @form[:s].index(src[:title]).nil? %>><%== src[:title] %></option>
 							<% end %>
 						</select>
 						<button class="btn btn-default btn-lg" title="Wyszukaj"><span class="glyphicon glyphicon-search"></span></button>

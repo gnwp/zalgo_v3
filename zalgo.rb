@@ -45,8 +45,50 @@ class Zalgo < Sinatra::Base
 
 	end
 
+	get "/query" do
+		# new, sphinx-based query
+		logger "/query/" + params.map{ |k,v| "#{k}='#{v}'" }.join( " " )
+		cache_key = OpenSSL::Digest::MD5.hexdigest( [params[:q], params[:s]].flatten.join())
+		cached = CACHE_CLIENT.get("/routes/query/#{cache_key}")
+		return cached unless cached.nil?
+
+		query = params[:q].to_s
+		if params[:s].class == Array && params[:s].count > 0
+			query += "( "
+			query += params[:s].uniq.map{|s| "(@source #{clean_sphinx(s)})"}.join(" | ")
+			query += ") "
+		end
+
+		post_ids = SPHINX["SELECT id FROM doc1 WHERE match(?) LIMIT 50", query].all
+		post_ids.map!{ |i| i[:id] }
+		if post_ids.count > 0
+			@title = params[:q].to_s
+			@zalgo_url = "/search?q=#{params[:q].gsub(/[ ]+/, "+")}"
+		else
+			@title = "Szukaj"
+			@zalgo_url = "/search"
+			post_ids << 999999999999999 #to trigger do-not-exist error
+		end
+
+		@posts = get_posts( :texts__id => post_ids )
+		@form = {
+			:q => params[:q].to_s,
+			:s => params[:s].uniq
+		}
+		@num_posts = @posts.count + 1
+
+		if @posts.nil? or @posts.count == 0
+			cached = @c.compress( erb :"404" )
+		else
+			cached = @c.compress( erb :node )
+		end
+		CACHE_CLIENT.set("/routes/query/#{cache_key}", cached)
+		return cached
+	end
+
 	get "/search" do
 		# ugly, hard-coded search. To be replaced by something more modular and nicer.
+		# now used only as handler for old urls
 		logger "/search/" + params.map{ |k,v| "#{k}='#{v}'" }.join( " " )
 		cache_key = OpenSSL::Digest::MD5.hexdigest(params.to_a.join)
 		cached = CACHE_CLIENT.get("/routes/search/#{cache_key}")
@@ -54,7 +96,7 @@ class Zalgo < Sinatra::Base
 
 		@zalgo_url = "/search"
 		@form = {}
-		if params[:q].nil? or params[:q] == ""
+		if params[:q].nil? or params[:q].strip == ""
 			query = get_posts( )
 			@title = "Szukaj"
 		else
