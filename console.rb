@@ -7,8 +7,7 @@ require "date"
 
 Bundler.require
 
-DB = Sequel.connect("postgres://antifa:antifa@localhost/antifa")
-
+load "settings.rb"
 load "helpers.rb"
 load "database.rb"
 Pry.start()
