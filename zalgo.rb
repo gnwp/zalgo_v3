@@ -73,7 +73,7 @@ class Zalgo < Sinatra::Base
 		@posts = get_posts( :texts__id => post_ids )
 		@form = {
 			:q => params[:q].to_s,
-			:s => params[:s].uniq
+			:s => params[:s]
 		}
 		@num_posts = @posts.count + 1
 
