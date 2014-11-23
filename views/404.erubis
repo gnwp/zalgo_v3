@@ -5,7 +5,7 @@
 </div>
 
 <div class="row">
-	<form class="form" role="search" action="/query" method="get">
+	<form class="form" role="search" action="/zalgo/query" method="get">
 		<div class="col-md-6 col-md-offset-3 centered">
 
             <div class="form-group">
