@@ -23,6 +23,10 @@ class Sinatra::Base
 
 	helpers do
 
+		def uu
+			return URL_BASE
+		end
+
 		def logger( text )
 			puts Time.now.strftime("%H:%M:%S") + "	" + text
 			return nil

@@ -5,13 +5,13 @@
 		<ul class="breadcrumb">
 			<li>
 				<a href="#post<%= post[:text_id] %>" class="glyphicon glyphicon-pushpin" title="Odnośnik do tego miejsca"></a>
-				<a href="/zalgo/post/<%= post[:text_id] %>" class="glyphicon glyphicon-link" title="Odnośnik do tego posta"></a>
-				<a href="/zalgo/node/<%= post[:node_id] %>#post<%= post[:text_id] %>" class="glyphicon glyphicon-asterisk" title="Odnośnik do tego posta w całym temacie"></a>
+				<a href="<%== uu %>/post/<%= post[:text_id] %>" class="glyphicon glyphicon-link" title="Odnośnik do tego posta"></a>
+				<a href="<%== uu %>/node/<%= post[:node_id] %>#post<%= post[:text_id] %>" class="glyphicon glyphicon-asterisk" title="Odnośnik do tego posta w całym temacie"></a>
 			</li>
 			<li><%= post[:source_title] %></li>
-			<li><a href="/zalgo/node/<%= post[:node_id] %>#post<%= post[:text_id] %>"><%= post[:node_title] %></a></li>
+			<li><a href="<%== uu %>/node/<%= post[:node_id] %>#post<%= post[:text_id] %>"><%= post[:node_title] %></a></li>
 			<% if post[:text_title].strip.length > 0 %>
-				<li><a href="/zalgo/post/<%= post[:text_id] %>"><%= post[:text_title] %></a></li>
+				<li><a href="<%== uu %>/post/<%= post[:text_id] %>"><%= post[:text_title] %></a></li>
 			<% end %>
 		</ol>
 
@@ -21,13 +21,13 @@
 
 				<footer>
 					<cite title="<%= post[:sender_login] %>">
-						<a href="/zalgo/user/<%= post[:sender_id] %>"><%= post[:sender_login] %></a>
+						<a href="<%== uu %>/user/<%= post[:sender_id] %>"><%= post[:sender_login] %></a>
 
 					</cite>
 					@ <%= post[:text_date].strftime( "%Y-%m-%d %H:%I:%S" ) %>
 
 					<% if post[:receiver_login] %>
-						<b class="glyphicon glyphicon-chevron-right"></b> <a href="/zalgo/user/<%= post[:receiver_id] %>"><%= post[:receiver_login] %></a>
+						<b class="glyphicon glyphicon-chevron-right"></b> <a href="<%== uu %>/user/<%= post[:receiver_id] %>"><%= post[:receiver_login] %></a>
 					<% end %>
 				</footer>
 			</blockquote>
