@@ -59,7 +59,7 @@ class Zalgo < Sinatra::Base
 			query += ") "
 		end
 
-		post_ids = SPHINX["SELECT id FROM doc1 WHERE match(?) LIMIT 50", query].all
+		post_ids = SPHINX["SELECT id FROM #{SPHINX_T} WHERE match(?) LIMIT 50", query].all
 		post_ids.map!{ |i| i[:id] }
 		if post_ids.count > 0
 			@title = params[:q].to_s
